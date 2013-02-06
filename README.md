@@ -6,15 +6,15 @@ A template to help with making projects to embed in the MinnPost site.  Use this
 
 *Describe the data sources here.  Use links and URLs to show where the data came from.  But small sized originals or modified data sources in the ```data``` folder*
 
-*For larger data sources that may need to be processed, provide instructions on how to download.  For instance:  ```cd data && wget blah.txt```.  Also, make sure to put an entry in the ```.gitignore```.
+*For larger data sources that may need to be processed, provide instructions on how to download.  For instance:  ```cd data && wget blah.txt```.  Also, make sure to put an entry in the ```.gitignore```.*
 
 ## Data Processing
 
-*Describe data processing here, include commands.  Put data processing scripts or configurations in the ```data-processing``` folder.
+*Describe data processing here, include commands.  Put data processing scripts or configurations in the ```data-processing``` folder.*
 
 ## Application or Visualization
 
-*Describe how to view the visualization or applications here.  Usually this will just mean going to ```applications/index.html``` in your browser.```
+*Describe how to view the visualization or applications here.  Usually this will just mean going to ```applications/index.html``` in your browser.```*
 
 ## Installation
 
