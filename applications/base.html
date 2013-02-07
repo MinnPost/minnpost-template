@@ -176,6 +176,19 @@
       while being able to use a newer version of jQuery.
       
       See: https://github.com/MinnPost/jquery-custom
+      
+      JS and other relevant libraries are hosted on our
+      AWS S3 account.  This ensures we do not have to
+      embed them or otherwise manage them on the MinnPost
+      site which would be a pain.  We can also leverage
+      using the same source across projects.
+      
+      You are welcome to use hosted/CDN versions of
+      libraries, but do ensure you are using a specific
+      version.  DO NOT use the latest, or latest-stable,
+      or development versions of hosted libraries
+      as they are subject to change and will eventutally
+      break, creating more work for us.
     -->
     <script type="text/javascript">
       window.jQuery || document.write('<script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/js/jquery-1.3.2/jquery-1.3.2.min.js"><\/script>')
