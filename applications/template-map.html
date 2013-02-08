@@ -114,6 +114,14 @@
         margin-bottom: 1em;
       }
       
+      .interactive-container .interactive-map .map-legends,
+      .interactive-container .interactive-map .map-tooltip,
+      .interactive-container .interactive-map .map-fullscreen,
+      .interactive-container .interactive-map .zoomer {
+        background-color: #FFFFFF;
+        background-color: rgba(255, 255, 255, 0.85);
+      }
+      
       /**
        * Begin custom styles.
        */
@@ -177,13 +185,25 @@
     
     
     <!--
-      The following are templates that will be used
-      through Javascript.
-      
-      Mapbox.js actually comes with Mustache so it makes sense
-      to use this for templating.
+      The following are Mustache templates that can be
+      used in MapBox templates (as Mustache is built
+      into the MapBox.js).
       
       See: https://github.com/janl/mustache.js
+    -->
+    <script id="template-map-tooltip" type="text/template">
+      <div class="map-tooltip-container">
+        Zip code: {{ ZCTA5CE10 }}
+      </div>
+    </script>
+    
+    
+    <!--
+      The following are templates that will be used
+      through Javascript.  They should be written in
+      Underscore.js templating markup.
+      
+      See: http://underscorejs.org/#template
     -->
     <script id="template-loading" type="text/template">
       <div class="loading-general-container">
@@ -191,9 +211,9 @@
       </div>
     </script>
     
-    <script id="template-map-tooltip" type="text/template">
-      <div class="map-tooltip-container">
-        Zip code: {{ ZCTA5CE10 }}
+    <script id="template-map-legend" type="text/template">
+      <div class="map-legend-container">
+        Example Legend
       </div>
     </script>
     
@@ -254,11 +274,16 @@
       (function($, w, undefined) {
         // Document is fully loaded
         $(document).ready(function() {
-          // Load up templates markup.  We do not compile them
-          // because Mapbox will do that.
+          // Load up templates markup.  We do not compile some of them
+          // because Mapbox will handle it
           var templates = {
             loading: $('#template-loading').html(),
-            tooltip: $('#template-map-tooltip').html()
+            tooltip: $('#template-map-tooltip').html(),
+            legend: $('#template-map-legend').html()
+          };
+          var compiledTemplates = {
+            loading: _.template(templates.loading),
+            legend: _.template(templates.legend)
           };
           
           // Function to change template in tilejson
@@ -292,10 +317,17 @@
               // Add interaction from new tilejson
               customTooltipMap.interaction.tilejson(tj).auto();
             }));
+            
+            // Add UI parts
             customTooltipMap.ui.zoomer.add();
             customTooltipMap.ui.zoombox.add();
+            customTooltipMap.ui.fullscreen.add();
+            //customTooltipMap.ui.hash.add();
             customTooltipMap.ui.attribution.add()
               .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');
+            
+            // Add in legend
+            customTooltipMap.ui.legend.add().content(compiledTemplates.legend({ }));
         });
       })(jQueryCustom, window);
     </script>
