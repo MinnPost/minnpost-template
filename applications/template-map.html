@@ -1,20 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
+<!--
+ This template is for a basic map using Mapbox.
+ 
+ This example uses Mapbox.js library.  Using the Leaflet
+ library may have features that are needed.
+-->
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>MinnPost Interactive Project</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
   <link rel="shortcut icon" href="http://www.minnpost.com//sites/default/themes/siteskin/favicon.ico" type="image/x-icon" />
-  <meta name="keywords" content="Mark Dayton,Minnesota DFL,Minnesota GOP,Minnesota Legislature,Vikings Stadium,Voter ID Amendment" />
-  <meta name="description" content="  " />
-  <meta property="og:title" content="The 2012 Legislative session: What did they pass?"/>
-  <meta property="og:site_name" content="MinnPost"/>
-  <meta property="og:description" content="Explore bills by category, investigate which bills Gov. Dayton vetoed, and search by your legislators.
-  "/>
-  <meta property="og:image" content="http://www.minnpost.com/sites/default/files/images/thumbnails/fullpagearticles/BillExplorerGraphic3.png"/>
-  <link rel="apple-touch-icon" href="http://www.minnpost.com//sites/default/themes/siteskin/inc/images/apple-touch-icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
 
 
@@ -62,7 +61,7 @@
       Include any library or external CSS files below.
     -->
     <style type="text/css">
-      /* @import url('https://s3.amazonaws.com/data.minnpost/js/flurid-2.1/flurid.min.css'); */
+      @import url('http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css');
     </style>
     
     
@@ -107,6 +106,12 @@
         vertical-align: middle;
         height: 100%;
         line-height: 100%;
+      }
+      
+      .interactive-container .interactive-map {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 1em;
       }
       
       /**
@@ -155,12 +160,42 @@
         <!--
           This is where your main HTML should go.
         -->
+        
+        <!--
+          Do ensure unique map id's so that multiple
+          maps can be embedded in the same page if needed.
+        -->
+        <div class="interactive-map" id="simple-map-example"></div>
+        <div class="interactive-map" id="interactive-map-example"></div>
+        <div class="interactive-map" id="interactive-map-tooltip-example"></div>
       </div>
       
       <div class="footnote">
         <p>Link to specific data sources.  Use as specific URL as you can and use the _blank target so that the link open in a new window. <a href="http://google.com" target="_blank">Google</a>.  Code, techniques, and data on <a href="https://github.com/MinnPost" target="_blank">Github</a>.</p>
       </div>
     </div>
+    
+    
+    <!--
+      The following are templates that will be used
+      through Javascript.
+      
+      Mapbox.js actually comes with Mustache so it makes sense
+      to use this for templating.
+      
+      See: https://github.com/janl/mustache.js
+    -->
+    <script id="template-loading" type="text/template">
+      <div class="loading-general-container">
+        <div class="loading-general"><span>Loading...</span></div>
+      </div>
+    </script>
+    
+    <script id="template-map-tooltip" type="text/template">
+      <div class="map-tooltip-container">
+        Zip code: {{ ZCTA5CE10 }}
+      </div>
+    </script>
     
 
 
@@ -194,6 +229,12 @@
       window.jQuery || document.write('<script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/js/jquery-1.3.2/jquery-1.3.2.min.js"><\/script>')
     </script>
     <script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/js/jquery-custom-master-20120606/jquery-1.7.2.custom.min.js"></script>
+    <script type="text/javascript" src="https://s3.amazonaws.com/data.minnpost/js/underscore-1.4.4/underscore-min.js"></script>
+    
+    <!--
+      Note using CDN hosted library but with specific version.
+    -->
+    <script type="text/javascript" src="http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.js"></script>
 
 
 
@@ -209,9 +250,53 @@
     -->
     <script type="text/javascript">
       jQueryCustom.noConflict();
-    
+
       (function($, w, undefined) {
+        // Document is fully loaded
+        $(document).ready(function() {
+          // Load up templates markup.  We do not compile them
+          // because Mapbox will do that.
+          var templates = {
+            loading: $('#template-loading').html(),
+            tooltip: $('#template-map-tooltip').html()
+          };
+          
+          // Function to change template in tilejson
+          var switchTileJSONTemplate = function(tilejson, template, type) {
+            type = type || 'teaser';
+            var re = new RegExp('({{#__' + type + '__}})(.*)({{\/__' + type + '__}})', 'm');
+            tilejson.template = tilejson.template.replace(re, '$1' + template + '$3');
+            return tilejson;
+          };
         
+          // Simple map
+          var simpleMap = mapbox.auto('simple-map-example', 'minnpost.map-wi88b700');
+          
+          // Basic interaction map using just the auto in mapbox
+          var simpleInteractionMap = mapbox.auto('interactive-map-example', 'minnpost.map-yl4k4j5g');
+          
+          // Interaction with custom template for tooltips
+          var customTooltipMap = mapbox.map('interactive-map-tooltip-example')
+            .addLayer(mapbox.layer().id('minnpost.map-yl4k4j5g', function(layer) {
+              var tj = layer._tilejson;
+              
+              // Use the tilejson layer data to center map.  Not sure if
+              // this is the most efficient way.
+              customTooltipMap.zoom(tj.center[2]).center({ lat: tj.center[1], lon: tj.center[0] });
+              
+              // Use custom template instead.  Use the console statement to
+              // determine what variables are in available in the template
+              // console.log(tj.template);
+              tj = switchTileJSONTemplate(tj, templates.tooltip);
+              
+              // Add interaction from new tilejson
+              customTooltipMap.interaction.tilejson(tj).auto();
+            }));
+            customTooltipMap.ui.zoomer.add();
+            customTooltipMap.ui.zoombox.add();
+            customTooltipMap.ui.attribution.add()
+              .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');
+        });
       })(jQueryCustom, window);
     </script>
   </div>
