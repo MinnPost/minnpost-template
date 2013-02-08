@@ -108,6 +108,10 @@
         line-height: 100%;
       }
       
+      .interactive-container .number {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      }
+      
       .interactive-container .interactive-map {
         width: 100%;
         height: 300px;
@@ -192,7 +196,7 @@
       See: https://github.com/janl/mustache.js
     -->
     <script id="template-map-tooltip" type="text/template">
-      <div class="map-tooltip-container">
+      <div class="map-tooltip-container number">
         Zip code: {{ ZCTA5CE10 }}
       </div>
     </script>
@@ -212,7 +216,7 @@
     </script>
     
     <script id="template-map-legend" type="text/template">
-      <div class="map-legend-container">
+      <div class="map-legend-container number">
         Example Legend
       </div>
     </script>
