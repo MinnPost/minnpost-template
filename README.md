@@ -1,51 +1,47 @@
-# MinnPost Template *Update Title*
+# MinnPost Templates
 
-A template to help with making projects to embed in the MinnPost site.  Use this template by cloning, but don't fork with Github. *Update project description here*
+This is a set of templates for interactive projects.  Given the workflow of how MinnPost uses its CMS, the publishing process of interactive pieces is usually just embedding HTML/CSS/JS into the content of an article.  This is flexible but can create some issues.
 
-## Data
+These templates use the [Grunt Project Scaffolding](http://gruntjs.com/project-scaffolding) (`grunt-init`) to create projects from templates.
 
-*Describe the data sources here.  Use links and URLs to show where the data came from.  But small sized originals or modified data sources in the ```data``` folder*
+See (the wiki for more in-depth on how code at MinnPost)[https://github.com/MinnPost/minnpost-template/wiki].
 
-*For larger data sources that may need to be processed, provide instructions on how to download.  For instance:  ```cd data && wget blah.txt```.  Also, make sure to put an entry in the ```.gitignore```.*
+## Issues with interactive embedding
 
-## Data Processing
+* Creating a development environment can be difficult, as we want the same exact HTML/CSS/JS page environment as the site.
+* Code separation can be difficult and thus make it hard to structure code that is easy to read and efficient.
 
-*Describe data processing here, include commands.  Put data processing scripts or configurations in the ```data-processing``` folder.*
+## Prerequisites
 
-## Application or Visualization
+1. Install [Git](http://git-scm.com/).
+1. Install [NodeJS](http://nodejs.org/).
+1. Intall grunt-init: `npm install -g grunt-init`
 
-*Describe how to view the visualization or applications here.  Usually this will just mean going to ```applications/index.html``` in your browser.```*
+## Install
 
-## Installation
+1. Check out this code with [Git](http://git-scm.com/): `git clone git@github.com:MinnPost/minnpost-template.git`
+1. Go into the template directory: `cd minnpost-template`
+1. Install packages: `npm install`
 
-*Describe any installation steps here.  This may not be necessary for your project.  Remove if not using.*
+## Templates
 
-### Node.js or Grunt projects
+* `template-general`: This is a meta-template that should not usually be directly used.  It contains things that almost all other templates will use.
 
-Use a ```package.json``` file to describe project and dependencies.
+## Creating a project from a template
 
-1. Install ```node.js```.  On a Mac, use [Homebrew]() with: ```brew install node```
-2. ```npm install```
+1. Create a new project on Github, see [naming guidelines](https://github.com/MinnPost/minnpost-template/wiki#repository-naming).  For instance: `minnpost-example`.
+   * (Start in the open or with the intention that it will be later)[https://github.com/MinnPost/minnpost-template/wiki].
+1. Checkout the code locally: `git clone git@github.com:MinnPost/minnpost-example.git`
+1. Go into the directory: `cd minnpost-example`
+1. Install template, for instance: `grunt-init /path/to/minnpost-template-dir/template-application`
+1. **Change values as needed!**
 
-### Python projects
+### Linking templates
 
-Use a ```requirements.txt``` file that list packages needed.  Suggest using [virtualenv](http://pypi.python.org/pypi/virtualenv);
+Grunt-init will read templates that are in a `~/.grunt-init/` folder.  It does not read recursively, so you'll have to link each one.  For instance.
 
-1. ```easy_install pip```
-2. ```easy_install virtualenv```
-3. ```virtualenv ENV```
-4. ```cd ENV && source bin/activiate; cd -;```
-5. ```pip install -r requirements.txt```
+`ln -s /path/to/this/repo/template-application ~/.grunt-init/template-application`
 
-## Building
+This would allow you to run this command to create templates, which will save you some keystrokes.
 
-*Describe any building steps here.  This may not be necessary for your project.  Remove if not using.*
-
-[Grunt.js](http://gruntjs.com/) can be used to combine JS or CSS files if needed.  Edit the ```grunt.js``` and ```package.json``` (used to help build with Grunt) as needed.
-
-## Deployment
-
-*Describe any deployment steps here*
-
-Given that putting projects into the MinnPost site is simply embedding HTML/CSS/JS, things like images need to be hosted somewhere.  [Grunt.js](http://gruntjs.com/) can be used to push images and data to our AWS account.  Edit the ```grunt.js``` file if needed.
-
+`grunt-init template-application`
