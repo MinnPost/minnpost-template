@@ -8,24 +8,24 @@
 exports.description = 'Creates a general template for a project.';
 
 // Template-specific notes to be displayed before question prompts.
-exports.notes = '_Project name_ should be the same as the name of the Github repository' +
+exports.notes = '_Project name_ should be the same as the name of the Github repository \n' +
   '\n\n' +
-  '  * Use lowercase characters ' +
-  '  * Use hyphens instead of spaces or underscores ' +
+  '  * Use lowercase characters \n' +
+  '  * Use hyphens instead of spaces or underscores \n' +
   '  * For projects that are very specific to a single story or group of stories, ' +
-  'Prefix the repository with _minnpost-_.' +
+  'Prefix the repository with _minnpost-_. \n' +
   '  * For re-usable libraries, follow naming conventions that are most appropriate ' +
   'given the technologies used (language and distribution system), such as NPM and ' +
-  'Node, Python and PIP.' +
+  'Node, Python and PIP. \n' +
   '\n\n' +
-  'See: https://github.com/MinnPost/minnpost-template/wiki';
+  'See: https://github.com/MinnPost/minnpost-template/wiki \n';
 
 // Template-specific notes to be displayed after question prompts.
 exports.after = 'You may need to do some install tasks now: ' +
   '\n\n' +
-  '  * Install NodeJS dependencies with _npm install_.' + 
-  '  * Install Python dependencies with _pip install -r requirements.txt_.' + 
-  '  * Install Ruby dependencies with _bundle install_.' +
+  '  * Install NodeJS dependencies with _npm install_. \n' + 
+  '  * Install Python dependencies with _pip install -r requirements.txt_. \n' + 
+  '  * Install Ruby dependencies with _bundle install_. \n' +
   '';
 
 // Any existing file or directory matching this wildcard will cause a warning.
@@ -33,6 +33,7 @@ exports.warnOn = '*';
 
 // The actual init template.
 exports.template = function(grunt, init, done) {
+
   // Prompts to get values
   var prompts = [
     init.prompt('name', 'minnpost-example'),
@@ -43,11 +44,19 @@ exports.template = function(grunt, init, done) {
     init.prompt('homepage'),
     init.prompt('bugs'),
     init.prompt('author_name'),
-    init.prompt('author_email')
+    init.prompt('author_email'),
+    init.prompt('python_dependencies', 'y/N')
   ];
 
   // Process prompts
   init.process({}, prompts, function(err, props) {
+    // Sanitize values coming in.  Check boolean type values
+    ['python_dependencies'].forEach(function(p, i) {
+      props[p] = (props[p] === 'y/N') ? false : props[p];
+      props[p] = (props[p].toString().toLowerCase() === 'y' || props[p] === 1 || props[p] === true) ? true : false;
+    });
+  
+    // Create contributor object
     var contributors = [{
       name: props.author_name,
       email: props.author_email
