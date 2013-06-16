@@ -1,0 +1,3 @@
+{
+  "requirements.txt": "{%= (python_dependencies.length > 0) ? 'requirements.txt' : false %}"
+}

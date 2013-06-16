@@ -1,0 +1,2 @@
+{% _.each(python_dependencies, function(d) { %}
+{%= d %}{% }) %}

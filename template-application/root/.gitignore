@@ -3,6 +3,7 @@ components
 !dist
 
 # General git ignores
+.sass-cache
 .DS_Store
 *.psd
 *.[oa]

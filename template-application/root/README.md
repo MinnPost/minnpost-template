@@ -19,7 +19,10 @@ The following describes how the data was processed and is not necessarily needed
 1. Install [Git](http://git-scm.com/).
 1. Install [NodeJS](http://nodejs.org/).
 1. Optionally, for development, install [Grunt](http://gruntjs.com/): `npm install -g grunt-cli`
-{% if (python_dependencies) { %}1. Install [Python](http://www.python.org/getit/) (probably already installed on your system).
+{% if (bower_components.length > 0) { %}1. Install [Bower](http://bower.io/): `npm install -g bower` {% } %}
+{% if (ruby_gems.length > 0) { %}1. Install [Ruby](http://www.ruby-lang.org/en/downloads/), though it is probably already installed on your system.
+1. Install [Bundler](http://gembundler.com/): `gem install bundler` {% } %}
+{% if (python_dependencies.length > 0) { %}1. Install [Python](http://www.python.org/getit/), though it is probably already installed on your system.
 1. Install [pip](https://pypi.python.org/pypi/pip): `easy_install pip`
 1. Optional, use [virtualenv](http://www.virtualenv.org/en/latest/), where ENV is an arbitrary environment name.
     1. `easy_install virtualenv`
@@ -31,8 +34,15 @@ The following describes how the data was processed and is not necessarily needed
 1. Check out this code with [Git](http://git-scm.com/): `git clone git@github.com:MinnPost/{%= name %}.git`
 1. Go into the template directory: `cd {%= name %}`
 1. Install NodeJS packages: `npm install`
-{% if (python_dependencies) { %}1. Install python packages: `pip install -r requirements.txt` {% } %}
+{% if (bower_components.length > 0) { %}1. Install Bower components: `bower install` {% } %}
+{% if (ruby_gems.length > 0) { %}1. Install Ruby gems: `bundle install` {% } %}
+{% if (python_dependencies.length > 0) { %}1. Install python packages: `pip install -r requirements.txt` {% } %}
 1. View `index.html` in your browser.
+
+## Development
+
+* Utilize `index.html` for development, while `index-deploy.html` is used for the deployed version.
+* Since this application uses SASS, utilize `grunt watch` to automatically compile the SASS files when they are saved.
 
 ## Build
 

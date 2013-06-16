@@ -25,7 +25,8 @@ exports.after = 'You may need to do some install tasks now: \n' +
   '\n' +
   '  * Install NodeJS dependencies with _npm install_. \n' + 
   '  * Install Python dependencies with _pip install -r requirements.txt_. \n' + 
-  '  * Install Ruby dependencies with _bundle install_. \n' +
+  '  * Install Ruby gems with _bundle install_. \n' +
+  '  * Install Bower components with _bower install_. \n' + 
   '';
 
 // Any existing file or directory matching this wildcard will cause a warning.
@@ -61,7 +62,7 @@ exports.template = function(grunt, init, done) {
     },
     bower_components: {
       message: 'Bower components',
-      default: 'underscore backbone jquery#1.9',
+      default: 'underscore backbone jquery#1.9 jquery-jsonp',
       warning: 'Must be zero or more space-separated dependencies with # to spearate ' +
         'package and version.  For instance, underscore, or jquery#1.9',
       sanitize: function(value, data, done) { done(handleSplit(value)); }
@@ -142,7 +143,23 @@ exports.template = function(grunt, init, done) {
     
       return pkg;
     });
-
+    
+    // Since component file is just JSON, its easier to do here
+    if (props.bower_components.length > 0) {
+      init.writePackageJSON('component.json', {}, function(pkg) {
+        pkg.name = props.name;
+        pkg.version = props.version;
+        pkg.main = 'index.html';
+        pkg.ignore = [ '**/.*', 'node_modules', 'components' ];
+        pkg.dependencies = pkg.dependencies || {};
+        props.bower_components.forEach(function(c) {
+          pkg.dependencies[c.split('#')[0]] = (c.split('#')[1]) ? c.split('#')[1] : '*';
+        });
+      
+        return pkg;
+      });
+    }
+    
     // All done!
     done();
   });
