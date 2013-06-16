@@ -9,7 +9,7 @@ exports.description = 'Creates a general template for a project.';
 
 // Template-specific notes to be displayed before question prompts.
 exports.notes = '_Project name_ should be the same as the name of the Github repository \n' +
-  '\n\n' +
+  '\n' +
   '  * Use lowercase characters \n' +
   '  * Use hyphens instead of spaces or underscores \n' +
   '  * For projects that are very specific to a single story or group of stories, ' +
@@ -17,12 +17,12 @@ exports.notes = '_Project name_ should be the same as the name of the Github rep
   '  * For re-usable libraries, follow naming conventions that are most appropriate ' +
   'given the technologies used (language and distribution system), such as NPM and ' +
   'Node, Python and PIP. \n' +
-  '\n\n' +
+  '\n' +
   'See: https://github.com/MinnPost/minnpost-template/wiki \n';
 
 // Template-specific notes to be displayed after question prompts.
-exports.after = 'You may need to do some install tasks now: ' +
-  '\n\n' +
+exports.after = 'You may need to do some install tasks now: \n' +
+  '\n' +
   '  * Install NodeJS dependencies with _npm install_. \n' + 
   '  * Install Python dependencies with _pip install -r requirements.txt_. \n' + 
   '  * Install Ruby dependencies with _bundle install_. \n' +
@@ -33,6 +33,55 @@ exports.warnOn = '*';
 
 // The actual init template.
 exports.template = function(grunt, init, done) {
+  // Some utility functions
+  var handleNone = function(value) {
+    return (value === 'none') ? '' : value;
+  };
+  var handleSplit = function(value) {
+    value = handleNone(value.trim());
+    return (value === '') ? [] : value.split(/\s+/);
+  };
+
+  // Add our own custom prompts, as the init.prompt() function
+  // is limited
+  grunt.util._.extend(init.prompts, {
+    node_dependencies: {
+      message: 'Node dependencies',
+      default: 'none',
+      warning: 'Must be zero or more space-separated dependencies with # to spearate ' +
+        'package and version.  For instance, node-csv, or node-csv#~1.2',
+      sanitize: function(value, data, done) { done(handleSplit(value)); }
+    },
+    node_devDependencies: {
+      message: 'Node Dev dependencies',
+      default: 'none',
+      warning: 'Must be zero or more space-separated dependencies with # to spearate ' +
+        'package and version.  For instance, node-csv, or node-csv#~1.2',
+      sanitize: function(value, data, done) { done(handleSplit(value)); }
+    },
+    bower_components: {
+      message: 'Bower components',
+      default: 'underscore backbone jquery#1.9',
+      warning: 'Must be zero or more space-separated dependencies with # to spearate ' +
+        'package and version.  For instance, underscore, or jquery#1.9',
+      sanitize: function(value, data, done) { done(handleSplit(value)); }
+    },
+    python_dependencies: {
+      message: 'Python dependencies',
+      default: 'none',
+      warning: 'Must be zero or more space-separated dependencies.  For instance, ' +
+        'dateutils, dateutils==0.1.1, dateutils>=2.3, or ' +
+        'git://git.myproject.org/MyProject.git#egg=MyProject',
+      sanitize: function(value, data, done) { done(handleSplit(value)); }
+    },
+    ruby_gems: {
+      message: 'Ruby Gems',
+      default: 'none',
+      warning: 'Must be zero or more space-separated dependencies with # to spearate ' +
+        'package and version.  For instance, haml, or haml#1.2',
+      sanitize: function(value, data, done) { done(handleSplit(value)); }
+    }
+  });
 
   // Prompts to get values
   var prompts = [
@@ -45,16 +94,15 @@ exports.template = function(grunt, init, done) {
     init.prompt('bugs'),
     init.prompt('author_name'),
     init.prompt('author_email'),
-    init.prompt('python_dependencies', 'y/N')
+    init.prompt('node_dependencies'),
+    init.prompt('node_devDependencies'),
+    init.prompt('bower_components'),
+    init.prompt('python_dependencies'),
+    init.prompt('ruby_gems')
   ];
 
   // Process prompts
   init.process({}, prompts, function(err, props) {
-    // Sanitize values coming in.  Check boolean type values
-    ['python_dependencies'].forEach(function(p, i) {
-      props[p] = (props[p] === 'y/N') ? false : props[p];
-      props[p] = (props[p].toString().toLowerCase() === 'y' || props[p] === 1 || props[p] === true) ? true : false;
-    });
   
     // Create contributor object
     var contributors = [{
@@ -69,10 +117,17 @@ exports.template = function(grunt, init, done) {
     // Generate package.json file.  Grunt will process many things
     // automatically, but we need to customize it a bit
     props.licenses = null;
-    props.dependencies = props.dependencies || {};
-    props.devDependencies = props.devDependencies || {};
     delete props.author_name;
     delete props.author_email;
+    
+    props.dependencies = props.dependencies || {};
+    props.node_dependencies.forEach(function(d) {
+      props.dependencies[d.split('#')[0]] = (d.split('#')[1]) ? d.split('#')[1] : '*';
+    }); 
+    props.devDependencies = props.devDependencies || {};
+    props.node_devDependencies.forEach(function(d) {
+      props.devDependencies[d.split('#')[0]] = (d.split('#')[1]) ? d.split('#')[1] : '*';
+    });
     
     init.writePackageJSON('package.json', props, function(pkg, props) {
       pkg.author = {
