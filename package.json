@@ -1,7 +1,10 @@
 {
   "name": "minnpost-template",
   "version": "0.0.1",
-  "author": "MinnPost <support@minnpost.com>",
+  "author": {
+    "name": "MinnPost",
+    "email": "support@minnpost.com"
+  },
   "homepage": "https://github.com/MinnPost/minnpost-template",
   "description": "MinnPost template",
   "contributors": [ 
@@ -20,7 +23,9 @@
     "grunt"
   ],
   "dependencies" : {
-    "grunt-init": "*"
+    "grunt-init": "~0.2.1",
+    "request": "~2.21.0",
+    "cheerio": "~0.12.0"
   }, 
   "licenses": [
     {
