@@ -25,7 +25,7 @@ See (the wiki for more in-depth on how code at MinnPost)[https://github.com/Minn
 
 ## Templates
 
-* `template-general`: This is a meta-template that should not usually be directly used.  It contains things that almost all other templates will use.
+* `template-application`: This is a template for pieces that are full applications.  This is subjective.
 
 ## Creating a project from a template
 

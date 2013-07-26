@@ -19,6 +19,22 @@ var bowerComponentMap = {
   }
 };
 
+// For our assumed Grunt workflow
+var gruntDev = {
+  'grunt': '~0.4.1',
+  'grunt-contrib-concat': '~0.2.0',
+  'grunt-contrib-jshint': '~0.4.3',
+  'grunt-contrib-uglify': '~0.2.2',
+  'grunt-contrib-copy': '~0.4.1',
+  'grunt-contrib-jst': '~0.5.0',
+  'grunt-contrib-clean': '~0.4.0',
+  'grunt-gss-pull': '~0.1.2',
+  'grunt-s3': '~0.2.0-alpha',
+  'grunt-contrib-watch': '~0.4.4',
+  'grunt-contrib-sass': '~0.3.0',
+  'grunt-contrib-connect': '~0.3.0'
+}
+
 // Function to get current JS and CSS cache files from
 // Minnpost site
 var getMinnPostResources = function(done) {
@@ -123,6 +139,12 @@ exports.template = function(grunt, init, done) {
         warning: 'Must be zero or more space-separated dependencies with # to spearate ' +
           'package and version.  For instance, haml, or haml#1.2',
         sanitize: function(value, data, done) { done(handleSplit(value)); }
+      },
+      use_sass: {
+        message: 'Use SASS',
+        default: 'Y',
+        warning: 'Must be Y or N.',
+        sanitize: function(value, data, done) { done((value.toLowerCase() === 'y') ? true : false); }
       }
     });
   
@@ -141,14 +163,15 @@ exports.template = function(grunt, init, done) {
       init.prompt('node_devDependencies'),
       init.prompt('bower_components'),
       init.prompt('python_dependencies'),
-      init.prompt('ruby_gems')
+      init.prompt('ruby_gems'),
+      init.prompt('use_sass')
     ];
   
     // Process prompts
     init.process({}, prompts, function(err, props) {
       props.minnPostResources = minnPostResources;
       props.bowerComponentMap = bowerComponentMap;
-    
+      
       // Create contributor object
       var contributors = [{
         name: props.author_name,
@@ -174,6 +197,13 @@ exports.template = function(grunt, init, done) {
         props.devDependencies[d.split('#')[0]] = (d.split('#')[1]) ? d.split('#')[1] : '*';
       });
       
+      // Add in grunt dev
+      Object.keys(gruntDev).forEach(function(p) {
+        if (!props.devDependencies[p]) {
+          props.devDependencies[p] = gruntDev[p];
+        }
+      });
+      
       init.writePackageJSON('package.json', props, function(pkg, props) {
         pkg.author = {
           name: 'MinnPost',
@@ -190,11 +220,11 @@ exports.template = function(grunt, init, done) {
       
       // Since component file is just JSON, its easier to do here
       if (props.bower_components.length > 0) {
-        init.writePackageJSON('component.json', {}, function(pkg) {
+        init.writePackageJSON('bower.json', {}, function(pkg) {
           pkg.name = props.name;
           pkg.version = props.version;
           pkg.main = 'index.html';
-          pkg.ignore = [ '**/.*', 'node_modules', 'components' ];
+          pkg.ignore = [ '**/.*', 'node_modules', 'components', 'bower_components' ];
           pkg.dependencies = pkg.dependencies || {};
           props.bower_components.forEach(function(c) {
             pkg.dependencies[c.split('#')[0]] = (c.split('#')[1]) ? c.split('#')[1] : '*';

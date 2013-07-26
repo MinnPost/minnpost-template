@@ -60,19 +60,13 @@
       }
     </style>
   
-    <!-- Library or external CSS files -->
     <style type="text/css">
-    {% _.each(bower_components, function(c) { %}{% var l = c.split('#')[0] %} {% if (bowerComponentMap.css[l]) { %}
-      @import url('./bower_components/{%= l %}/{%= bowerComponentMap.css[l] %}');{% } %}{% }) %}
-    </style>
-
-    <!-- Application CSS -->
-    <style type="text/css">
-      @import url('./css/compiled/main.css');
+      @import url('./dist/{%= name %}.libs.css');
+      @import url('./dist/{%= name %}.latest.css');
     </style>
     <!--[if lte IE 8]>
       <style type="text/css">
-        @import url('./css/compiled/main.ie.css');
+        @import url('./dist/{%= name %}.latest.ie.css');
       </style>
     <![endif]-->
 
@@ -131,11 +125,8 @@
       }
     </script>
     
-    {% _.each(bower_components, function(c) { %}{% var l = c.split('#')[0] %}
-    <script type="text/javascript" src="./bower_components/{%= l %}/{%= (bowerComponentMap.js[l]) ? bowerComponentMap.js[l] : l + '.js' %}"></script>{% }) %}
-
-    <script type="text/javascript" src="./js/core.js"></script>
-    <script type="text/javascript" src="./js/app.js"></script>
+    <script type="text/javascript" src="./dist/{%= name %}.libs.js"></script>
+    <script type="text/javascript" src="./dist/{%= name %}.latest.min.js"></script>
 
     <!--
       Please follow the JS coding guidelines that
@@ -146,7 +137,9 @@
       (function(app, $, undefined) {
         $(document).ready(function() {
           app.start(_.extend(app.defaultOptions, {
-            el: '#{%= name %}-container'
+            el: '#{%= name %}-container',
+            dataPath: './dist/data/',
+            imagePath: './dist/images/'
           }));
         });
     

@@ -1,3 +1,11 @@
 {
-  "requirements.txt": "{%= (python_dependencies.length > 0) ? 'requirements.txt' : false %}"
+  "requirements.txt": "{%= (python_dependencies.length > 0) ? 'requirements.txt' : false %}",
+  "css/_helpers.scss": "{%= (use_sass) ? 'css/_helpers.scss' : false %}",
+  "css/_mixins.scss": "{%= (use_sass) ? 'css/_mixins.scss' : false %}",
+  "css/_styles.scss": "{%= (use_sass) ? 'css/_styles.scss' : false %}",
+  "css/_variables.scss": "{%= (use_sass) ? 'css/_variables.scss' : false %}",
+  "css/main.scss": "{%= (use_sass) ? 'css/main.scss' : false %}",
+  "css/main.ie.scss": "{%= (use_sass) ? 'css/main.ie.scss' : false %}",
+  "css/styles.css": "{%= (use_sass) ? false : 'css/styles.css' %}",
+  "css/styles.ie.css": "{%= (use_sass) ? false : 'css/styles.ie.css' %}"
 }

@@ -1,0 +1,17 @@
+/**
+ * Main styles for application
+ */
+.{%= name %}-application-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding-top: 1em;
+
+  .clear {
+    clear: both;
+  }
+  .js-dependent,
+  .hidden {
+    display: none;
+  }
+
+}
