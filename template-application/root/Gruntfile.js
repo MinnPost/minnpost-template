@@ -257,7 +257,7 @@ module.exports = function(grunt) {
 
   // Watch tasks
   grunt.registerTask('lint-watch', ['jshint'{% if (use_sass) { %}, 'sass:dev'{% } %}]);
-  grunt.registerTask('server-watch', ['connect', 'watch']);
+  grunt.registerTask('server', ['connect', 'watch']);
   
   // Deploy tasks
   grunt.registerTask('mp-deploy', ['s3']);

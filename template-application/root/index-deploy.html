@@ -36,30 +36,6 @@
     node-body fieldlayout node-field-body
   -->
   <div class="node-body fieldlayout node-field-body">
-    <!--
-      Some inline styles that are a bit of a wrapper
-      around the application.
-    -->
-    <style type="text/css">
-      body .node-unpublished {
-        background-repeat: no-repeat;
-      }
-      
-      .interactive-container  {
-        max-width: 960px;
-        margin: 0 auto;
-        padding-top: 1em;
-      }
-      .interactive-container .footnote {
-        font-size: .75em;
-        font-style: italic;
-        color: #414141;
-        margin-top: 3em;
-        border-top: 1px solid #BCBCBC;
-        padding-top: 1em;
-      }
-    </style>
-  
     <style type="text/css">
       @import url('https://s3.amazonaws.com/data.minnpost/projects/{%= name %}/{%= name %}.libs.css');
       @import url('https://s3.amazonaws.com/data.minnpost/projects/{%= name %}/{%= name %}.latest.css');
@@ -95,10 +71,6 @@
       <![endif]-->
       
       <div id="{%= name %}-container" class="{%= name %}-application-container">
-      </div>
-      
-      <div class="footnote">
-        <p>Code, techniques, and data on <a href="{%= homepage %}" target="_blank">Github</a>.</p>
       </div>
     </div>
     
@@ -136,14 +108,14 @@
     <script type="text/javascript">
       (function(app, $, undefined) {
         $(document).ready(function() {
-          app.start(_.extend(app.defaultOptions, {
+          var thisApp = new app({
             el: '#{%= name %}-container',
             dataPath: 'https://s3.amazonaws.com/data.minnpost/projects/{%= name %}/data/',
             imagePath: 'https://s3.amazonaws.com/data.minnpost/projects/{%= name %}/images/'
-          }));
+          });
+          thisApp.start();
         });
-    
-      })(mpApp['{%= name %}'], jQuery);
+      })(mpApps['{%= name %}'], jQuery);
     </script>
     
     <script type="text/javascript">
