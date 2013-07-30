@@ -6,6 +6,8 @@
  * Global variable to hold the "applications".
  */
 var mpApps = mpApps || {};
+var mpTemplates = mpTemplates || {};
+mpTemplates['{%= name %}'] = mpTemplates['{%= name %}'] || {};
 
 /**
  * Extend underscore
@@ -63,10 +65,12 @@ if (!_.isUndefined(Backbone) && !_.isUndefined($.jsonp) && _.isFunction(Backbone
  */
 (function($, undefined) {
   var App;
+  var appTemplates = mpTemplates['{%= name %}'] || {};
   
   mpApps['{%= name %}'] = App = (function() {
     function App(options) {
       this.options = _.extend(this.defaultOptions, options);
+      this.$el = $(this.options.el);
     }
     
     // Default options
@@ -85,7 +89,7 @@ if (!_.isUndefined(Backbone) && !_.isUndefined($.jsonp) && _.isFunction(Backbone
      *
      * Expects callback like: function(compiledTemplate) {  }
      */
-    App.prototype.templates = {};
+    App.prototype.templates = appTemplates;
     App.prototype.getTemplate = function(name, callback, context) {
       var thisApp = this;
       var templatePath = 'js/templates/' + name + '.html';
@@ -106,6 +110,11 @@ if (!_.isUndefined(Backbone) && !_.isUndefined($.jsonp) && _.isFunction(Backbone
           }
         });
       }
+    };
+    // Wrapper around getting a template
+    App.prototype.template = function(name) {
+      var templatePath = 'js/templates/' + name + '.html';
+      return this.templates[templatePath];
     };
   
     /**
@@ -134,7 +143,7 @@ if (!_.isUndefined(Backbone) && !_.isUndefined($.jsonp) && _.isFunction(Backbone
       // Go through each file and add to defers
       _.each(name, function(d) {
         var defer;
-        if (_.isUndefined(app.data[d])) {
+        if (_.isUndefined(thisApp.data[d])) {
           
           if (useJSONP) {
             defer = $.jsonp({

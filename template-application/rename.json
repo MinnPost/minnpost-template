@@ -7,5 +7,6 @@
   "css/main.scss": "{%= (use_sass) ? 'sass/main.scss' : false %}",
   "css/main.ie.scss": "{%= (use_sass) ? 'sass/main.ie.scss' : false %}",
   "css/styles.css": "{%= (use_sass) ? false : 'css/styles.css' %}",
-  "css/styles.ie.css": "{%= (use_sass) ? false : 'css/styles.ie.css' %}"
+  "css/styles.ie.css": "{%= (use_sass) ? false : 'css/styles.ie.css' %}",
+  "js/templates/template-map-label.html": "{%= (has_maps) ? 'js/templates/template-map-label.html' : false %}"
 }
