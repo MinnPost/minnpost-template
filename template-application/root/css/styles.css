@@ -1,5 +1,10 @@
 /**
  * Main styles for: {%= name %}
+ *
+ * Make the default styles for a 960px wide screen.  A mobile
+ * first approach is fine, but starting with a 960px wide
+ * screen means that older browsers that do not support
+ * media queries will be fine as they are all desktop browsers. 
  */
 body .node-unpublished {
   background-repeat: no-repeat;
@@ -21,5 +26,53 @@ body .node-unpublished {
 }
       
 .{%= name %}-application-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding-top: 1em;
+}
 
+.{%= name %}-application-container .clear { clear: both; }
+.{%= name %}-application-container .hidden { display: none; }
+
+.{%= name %}-application-container .sans-serif {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+/* Clearfix from http://nicolasgallagher.com/micro-clearfix-hack/ */
+.{%= name %}-application-container .cf:before,
+.{%= name %}-application-container .cf:after {
+  content: " "; /* 1 */
+  display: table; /* 2 */
+}
+.{%= name %}-application-container .cf:after {
+  clear: both;
+}
+.{%= name %}-application-container .cf {
+  *zoom: 1;
+}
+
+.{%= name %}-application-container .footnote {
+  font-size: .75em;
+  font-style: italic;
+  color: #414141;
+  margin-top: 3em;
+  border-top: 1px solid #BCBCBC;
+  padding-top: 1em;
+}
+
+.{%= name %}-application-container .loading {
+  width: 100%;
+  text-align: center;
+  padding: 2em 2em;
+  color: #ABABAB;
+  vertical-align: middle;
+  height: 100%;
+  line-height: 100%;
+}
+.{%= name %}-application-container .loading span {
+  padding: 10px 5px 10px 40px;
+  background: transparent url('https://s3.amazonaws.com/data.minnpost/projects/2012-mn-election-results/images/ajax-loader.gif') center left no-repeat;
+  vertical-align: middle;
+  height: 100%;
+  line-height: 100%;
 }
