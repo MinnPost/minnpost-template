@@ -96,6 +96,9 @@ exports.template = function(grunt, init, done) {
     var handleNone = function(value) {
       return (value === 'none') ? '' : value;
     };
+    var handleYN = function(value) {
+      return (value.toLowerCase() === 'y') ? true : false;
+    };
     var handleSplit = function(value) {
       value = handleNone(value.trim());
       return (value === '') ? [] : value.split(/\s+/);
@@ -145,6 +148,18 @@ exports.template = function(grunt, init, done) {
         default: 'Y',
         warning: 'Must be Y or N.',
         sanitize: function(value, data, done) { done((value.toLowerCase() === 'y') ? true : false); }
+      },
+      use_compass: {
+        message: 'Use Compass',
+        default: 'N',
+        warning: 'Must be Y or N.',
+        sanitize: function(value, data, done) { done((value.toLowerCase() === 'y') ? true : false); }
+      },
+      map: {
+        message: 'Using (Leaflet or MapBox) Maps',
+        default: 'N',
+        warning: 'Must be Y or N.',
+        sanitize: function(value, data, done) { done((value.toLowerCase() === 'y') ? true : false); }
       }
     });
   
@@ -164,7 +179,9 @@ exports.template = function(grunt, init, done) {
       init.prompt('bower_components'),
       init.prompt('python_dependencies'),
       init.prompt('ruby_gems'),
-      init.prompt('use_sass')
+      init.prompt('use_sass'),
+      init.prompt('use_compass'),
+      init.prompt('has_maps')
     ];
   
     // Process prompts
@@ -177,6 +194,14 @@ exports.template = function(grunt, init, done) {
         name: props.author_name,
         email: props.author_email
       }];
+      
+      // If using compass, then sass is true
+      props.sass = (props.compass) ? true : props.sass; 
+      
+      // Sanitize things properly
+      _.each(['use_sass', 'use_compass', 'has_maps'], function(p) {
+        props[p] = handleYN(props[p]);
+      });
   
       // Copy and process files, add in MIT license
       var files = init.filesToCopy(props);

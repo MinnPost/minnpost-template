@@ -39,8 +39,8 @@ module.exports = function(grunt) {
           style: 'compressed'
         },
         files: {
-          'css/compiled/main.min.css': 'css/main.scss',
-          'css/compiled/main.ie.min.css': 'css/main.scss'
+          'css/styles.min.css': 'sass/main.scss',
+          'css/styles.ie.min.css': 'sass/main.ie.scss'
         }
       },
       dev: {
@@ -48,8 +48,8 @@ module.exports = function(grunt) {
           style: 'expanded'
         },
         files: {
-          'css/compiled/main.css': 'css/main.scss',
-          'css/compiled/main.ie.css': 'css/main.scss'
+          'css/styles.css': 'sass/main.scss',
+          'css/styles.ie.css': 'sass/main.ie.scss'
         }
       }
     },{% } %}
@@ -82,19 +82,19 @@ module.exports = function(grunt) {
       },
       // CSS application
       {% if (use_sass) { %}dist_css: {
-        src: ['css/compiled/main.min.css'], 
+        src: ['css/styles.min.css'], 
         dest: 'dist/<%= pkg.name %>.<%= pkg.version %>.css'
       },
       dist_css_latest: {
-        src: ['css/compiled/main.min.css'], 
+        src: ['css/styles.min.css'], 
         dest: 'dist/<%= pkg.name %>.latest.css'
       },
       dist_css_ie: {
-        src: ['css/compiled/main.ie.min.css'], 
+        src: ['css/styles.ie.min.css'], 
         dest: 'dist/<%= pkg.name %>.<%= pkg.version %>.ie.css'
       },
       dist_css_latest_ie: {
-        src: ['css/compiled/main.ie.min.css'], 
+        src: ['css/styles.ie.min.css'], 
         dest: 'dist/<%= pkg.name %>.latest.ie.css'
       },
       {% } else { %}dist_css: {

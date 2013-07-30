@@ -10,7 +10,7 @@
   color: #222222;
 }
 
-{% if (map) { %}
+{% if (has_maps) { %}
 .{%= name %}-application-container {
   .leaflet-container {
     .map-label-container {

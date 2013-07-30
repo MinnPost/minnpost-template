@@ -29,6 +29,7 @@ The following describes how the data was processed and is not necessarily needed
     1. `virtualenv .env`
     1. `cd .env && source bin/activiate; cd -;` {% } %}
 {% if (use_sass) { %}1. Install [Sass](http://sass-lang.com/): `gem install sass`{% } %}
+{% if (use_compass) { %}1. Install [Compass](http://compass-style.org/): `gem install compass`{% } %}
 
 ## Install
 

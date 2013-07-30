@@ -63,14 +63,14 @@ body .node-unpublished {
   
     span {
       padding: 10px 5px 10px 40px;
-      background: transparent url('$loader-image') center left no-repeat;
+      background: transparent url($loader-image) center left no-repeat;
       vertical-align: middle;
       height: 100%;
       line-height: 100%;
     }
   }
   
-  {% if (map) { %}
+  {% if (has_maps) { %}
   .leaflet-container {
     width: 100%;
     height: 300px;
