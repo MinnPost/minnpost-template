@@ -97,7 +97,8 @@ exports.template = function(grunt, init, done) {
       return (value === 'none') ? '' : value;
     };
     var handleYN = function(value) {
-      return (value.toLowerCase() === 'y') ? true : false;
+      return (value === true || (typeof value == 'string' && value.toLowerCase() === 'y')) ? 
+        true : false;
     };
     var handleSplit = function(value) {
       value = handleNone(value.trim());
@@ -155,7 +156,7 @@ exports.template = function(grunt, init, done) {
         warning: 'Must be Y or N.',
         sanitize: function(value, data, done) { done((value.toLowerCase() === 'y') ? true : false); }
       },
-      map: {
+      has_maps: {
         message: 'Using (Leaflet or MapBox) Maps',
         default: 'N',
         warning: 'Must be Y or N.',
@@ -195,14 +196,14 @@ exports.template = function(grunt, init, done) {
         email: props.author_email
       }];
       
-      // If using compass, then sass is true
-      props.sass = (props.compass) ? true : props.sass; 
-      
       // Sanitize things properly
-      _.each(['use_sass', 'use_compass', 'has_maps'], function(p) {
+      ['use_sass', 'use_compass', 'has_maps'].forEach(function(p) {
         props[p] = handleYN(props[p]);
       });
-  
+      
+      // If using compass, then sass is true
+      props.use_sass = (props.use_compass) ? true : props.use_sass; 
+      
       // Copy and process files, add in MIT license
       var files = init.filesToCopy(props);
       init.copyAndProcess(files, props);
