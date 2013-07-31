@@ -25,7 +25,7 @@ See (the wiki for more in-depth on how code at MinnPost)[https://github.com/Minn
 
 ## Templates
 
-* `template-application`: This is a template for pieces that are full applications.  This is subjective.
+* `template-application`: This is a template for pieces that are full applications (which is subjective).
 
 ## Creating a project from a template
 
@@ -34,7 +34,8 @@ See (the wiki for more in-depth on how code at MinnPost)[https://github.com/Minn
 1. Checkout the code locally: `git clone git@github.com:MinnPost/minnpost-example.git`
 1. Go into the directory: `cd minnpost-example`
 1. Install template, for instance: `grunt-init /path/to/minnpost-template-dir/template-application`
-1. **Change values as needed!**
+1. Answer the questions.
+1. Run install commands (if any).
 
 ### Linking templates
 
