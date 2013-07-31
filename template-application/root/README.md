@@ -39,9 +39,8 @@ The following describes how the data was processed and is not necessarily needed
 {% if (bower_components.length > 0) { %}1. Install Bower components: `bower install` {% } %}
 {% if (ruby_gems.length > 0) { %}1. Install Ruby gems: `bundle install` {% } %}
 {% if (python_dependencies.length > 0) { %}1. Install python packages: `pip install -r requirements.txt` {% } %}
-1. View `index.html` in your browser.
 
-## Development
+## Development and Running Locally
 
 * Run: `grunt server`
    * This will run a local webserver for development and you can view the application in your web browser at [http://localhost:8899](http://localhost:8899).
